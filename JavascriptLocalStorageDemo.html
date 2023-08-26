@@ -129,7 +129,6 @@ tr:nth-child(even) {
     //
     function fnSetAllLocalStorageOnLoad(){
         try{
-        debugger;
             fnCreateTable();
             let tblData = document.querySelectorAll('#tblData tbody');
             let tblTrs = tblData[0].rows;
@@ -140,7 +139,6 @@ tr:nth-child(even) {
                         for (let iCells = 0; iCells < tblCells. length; iCells++) {
                            //iterate through cells
                            //cells would be accessed using the "cell" variable assigned in the for loop
-                           debugger;
                            let cellElement = tblCells[iCells];
                            let cellElId = cellElement.children[0].id;
                            let cellLclSValue = window.localStorage[cellElId];
@@ -194,7 +192,6 @@ tr:nth-child(even) {
 
 
     function setLocalStorage(element, colNum){
-        //debugger;
         switch(colNum){
             case 0:
                 fnSetLclStrCbx(element);
@@ -212,7 +209,6 @@ tr:nth-child(even) {
     }
 
     function fnSetLclStrCbx(element){
-    debugger;
         console.log('Cbx');
         let elementId = element.id,
             elementValue = element.value;
@@ -233,7 +229,6 @@ tr:nth-child(even) {
     }
 
     function fnSetLclStr(element){
-        debugger;
         let elementId = element.id,
             elementValue = element.value;
         localStorage.setItem(elementId, elementValue);

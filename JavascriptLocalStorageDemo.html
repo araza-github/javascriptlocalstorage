@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>001 Upwork Task</title>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.button {
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.btnClear {
+  background-color: white; 
+  color: red; 
+  border: 2px solid red;
+}
+
+.btnClear:hover {
+  background-color: red;
+  color: white;
+}
+</style>
+</head>
+<body onload="fnSetAllLocalStorageOnLoad();">
+
+<h1>Demo for Upwork Job</h1>
+<p><a href="https://www.upwork.com/jobs/~017dff9a5f38be1dea" target="_blank">Create an HTML/javascript page with auto updating table data</a></p>
+<div>Job Description</div>
+<div>
+    Create a simple HTML page that has a table with 4 columns.  
+</div>
+<div>
+    The 1st column would be a checkbox.  
+    </div>
+<div>
+    The 2nd column is a short description.  
+    </div>
+<div>
+    The 3rd column is a long description.  
+    </div>
+<div>
+    The 4th column is a notes field.
+    </div>
+
+    <br />
+
+    
+<button type="button" class="button btnClear" onclick="fnClearLocalStorage();">Clear Local Storage</button>
+
+<br />
+
+<table id="tblData">
+ <thead>
+    <tr>
+        <th>Checkbox</th>
+        <th>Short Description</th>
+        <th>Long Description</th>
+        <th>Notes</th>
+    </tr>
+ </thead>
+ <tbody>
+    <!--<tr>
+        <td>
+            <input type="checkbox" id="cbx1" name="cbx" onchange="setLocalStorage(this,0)" />
+        </td>
+        <td>
+            <textarea id="taShortDesc1" onkeyup="setLocalStorage(this,1)" placeholder="enter short description here...""></textarea>
+        </td>
+        <td>
+            <textarea id="taLongDesc1" onkeyup="setLocalStorage(this,2)" placeholder="enter long description here...""></textarea>
+        </td>
+        <td>
+            <textarea id="taShortNotes1" onkeyup="setLocalStorage(this,3)" placeholder="enter notes here..."></textarea>
+    
+        </td>
+    </tr>-->
+ </tbody>
+<table>
+
+
+<script>
+    //localStorage.clear();
+    //IE has a proprietary propery "window.localStorage.remainingSpace" which returns the remaining space in bytes. Unfortunately can't find similar functionality in any of the other browsers.
+
+    //http://msdn.microsoft.com/en-us/library/cc197016(v=vs.85).aspx
+    //paste on cut
+    const {
+    size
+    } = new Blob(Object.values(localStorage));
+    console.log(size);
+
+    const localStorageSpace = () => {
+        let localStorageAllStrings = '';
+        for (const key of Object.keys(window.localStorage)) {
+            localStorageAllStrings += window.localStorage[key];
+        }
+        return localStorageAllStrings ? 3 + ((localStorageAllStrings.length * 16) / (8 * 1024)) + ' KB' : 'Empty (0 KB)';
+    };
+    console.log(localStorageSpace());
+
+    function fnClearLocalStorage(){
+        localStorage.clear();
+        location.reload();
+    }
+
+    //
+    function fnSetAllLocalStorageOnLoad(){
+        try{
+        debugger;
+            fnCreateTable();
+            let tblData = document.querySelectorAll('#tblData tbody');
+            let tblTrs = tblData[0].rows;
+            if(tblTrs.length>0){
+                for (let iTrs = 0; iTrs < tblTrs.length; iTrs++) {
+                    let tblCells = tblTrs[iTrs].cells;
+                    if(tblCells.length>0){
+                        for (let iCells = 0; iCells < tblCells. length; iCells++) {
+                           //iterate through cells
+                           //cells would be accessed using the "cell" variable assigned in the for loop
+                           debugger;
+                           let cellElement = tblCells[iCells];
+                           let cellElId = cellElement.children[0].id;
+                           let cellLclSValue = window.localStorage[cellElId];
+
+                           if(cellLclSValue != undefined && cellLclSValue != null){
+                                  document.getElementById(cellElId).value = cellLclSValue;
+
+                                  if(iCells == 0){
+                                     document.getElementById(cellElId).checked = window.localStorage[cellElId] == 'true';
+                                  }
+                           }
+                        }  
+                   }
+                }
+
+                
+            }
+        }
+        catch(ex){
+        
+        }
+    }
+    function fnCreateTable(){
+        let noOfRows = 100;
+        //let tblData = document.querySelectorAll('#tblData tbody');
+        
+        let tblData = document.getElementById('tblData').getElementsByTagName('tbody')[0];
+
+        for(let iRow = 0; iRow < noOfRows; iRow++){
+          
+          let newRow = tblData.insertRow(tblData.rows.length);
+
+          let elementCbx = 'cbx'+ (iRow + 1).toString(),
+              elementSD = 'taShortDesc'+ (iRow + 1).toString(),
+              elementLD = 'taLongDesc'+ (iRow + 1).toString(),
+              elementNotes = 'taShortNotes'+ (iRow + 1).toString();
+
+              
+          let newCell1 = newRow.insertCell(0), newCell2 = newRow.insertCell(1),
+              newCell3 = newRow.insertCell(2), newCell4 = newRow.insertCell(3);
+      
+          // Insert data to cells
+          newCell1.innerHTML = '<input type="checkbox" id="'+elementCbx+'" name="'+elementCbx+'" onchange="setLocalStorage(this,0)" />';
+          newCell2.innerHTML = '<textarea id="'+elementSD+'" name="'+elementSD+'" onkeyup="setLocalStorage(this,1)" placeholder="enter short description here...""></textarea>';
+          newCell3.innerHTML = '<textarea id="'+elementLD+'" name="'+elementLD+'" onkeyup="setLocalStorage(this,2)" placeholder="enter long description here...""></textarea>';
+          newCell4.innerHTML = '<textarea id="'+elementNotes+'" name="'+elementNotes+'" onkeyup="setLocalStorage(this,3)" placeholder="enter notes here..."></textarea>';
+          
+                
+        }
+    }
+
+
+    function setLocalStorage(element, colNum){
+        //debugger;
+        switch(colNum){
+            case 0:
+                fnSetLclStrCbx(element);
+                break;
+            case 1:
+                fnSetLclStrSh(element);
+                break;
+            case 2:
+                fnSetLclStrLo(element);
+                break;
+            case 3:
+                fnSetLclStrNo(element);
+                break;
+        }
+    }
+
+    function fnSetLclStrCbx(element){
+    debugger;
+        console.log('Cbx');
+        let elementId = element.id,
+            elementValue = element.value;
+        element.value = document.getElementById(elementId).checked;
+        fnSetLclStr(element);
+    }
+    function fnSetLclStrSh(element){
+        console.log('Short');
+        fnSetLclStr(element);
+    }
+    function fnSetLclStrLo(element){
+        console.log('Long');
+        fnSetLclStr(element);
+    }
+    function fnSetLclStrNo(element){
+        console.log('Notes');
+        fnSetLclStr(element);
+    }
+
+    function fnSetLclStr(element){
+        debugger;
+        let elementId = element.id,
+            elementValue = element.value;
+        localStorage.setItem(elementId, elementValue);
+    }
+    </script>
+
+</body>
+</html>
+
+
